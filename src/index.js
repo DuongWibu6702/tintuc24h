@@ -7,6 +7,7 @@ const route = require('./routes')
 const db = require('./config/db')
 const methodOverride = require('method-override')
 const globalUser = require('./app/middlewares/globalUser')
+const session = require('express-session')
 const port = 3000
 
 app.use(express.static(path.join(__dirname, 'public')))
@@ -26,6 +27,14 @@ app.use(express.json())
 
 // Method Override
 app.use(methodOverride('_method'))
+
+
+// Session config
+app.use(session({
+  secret: 'tintuc24h-secret',   // Bạn có thể đổi
+  resave: false,
+  saveUninitialized: false,
+}))
 
 // Template engine
 const hbsHelpers = require('./app/helpers/handlebars');
