@@ -1,4 +1,4 @@
-const User = require('../models/User');
+const AuthService = require('../services/AuthService');
 
 class AuthController {
 
@@ -11,39 +11,41 @@ class AuthController {
     login(req, res, next) {
         const { username, password } = req.body;
 
-        if (!username || !password) {
-            return res.render('auth/login', { error: 'Username và password bắt buộc' });
-        }
-
-        User.findOne({ username })
+        AuthService.login(username, password)
             .then(user => {
-                if (!user) {
-                    return res.render('auth/login', { error: 'Sai tài khoản' });
+                req.session.user = {
+                    id: user._id.toString(),
+                    username: user.username,
+                    role: user.role
+                };
+
+                if (user.role === 'admin') {
+                    return res.redirect('/admin/stored/news');
                 }
-                
-                return user.comparePassword(password)
-                    .then(match => {
-                        if (!match) {
-                            return res.render('auth/login', { error: 'Sai mật khẩu' });
-                        }
 
-                        // Lưu session
-                        req.session.user = {
-                            id: user._id.toString(),
-                            username: user.username,
-                            role: user.role
-                        };
-
-                        // Admin → vào /admin
-                        if (user.role === 'admin') {
-                            return res.redirect('/admin/stored/news');
-                        }
-
-                        // User → về trang chủ
-                        return res.redirect('/');
-                    });
+                return res.redirect('/');
             })
-            .catch(next);
+            .catch(err => {
+                res.render('auth/login', { error: err.msg || 'Lỗi hệ thống' });
+            });
+    }
+
+    // [GET] /register
+    registerForm(req, res) {
+        res.render('auth/register', { error: null });
+    }
+
+    // [POST] /register
+    register(req, res, next) {
+        const { username, password, confirmPassword } = req.body;
+
+        AuthService.register(username, password, confirmPassword)
+            .then(() => res.redirect('/login'))
+            .catch(err => {
+                res.render('auth/register', {
+                    error: err.msg || 'Lỗi hệ thống'
+                });
+            });
     }
 
     // [GET] /logout

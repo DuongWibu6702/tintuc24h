@@ -1,69 +1,54 @@
-const Newdb = require('../models/News');
-const marked = require('marked');
+const NewsService = require('../services/NewsService');
 const { mongooseToObject, multipleMongooseToObject } = require('../../util/mongoose');
 
 class NewsController {
 
-    // [GET] /news?page=  (UI HTML)
+    // [GET] /news?page=
     list(req, res, next) {
         const perPage = 10;
         const page = parseInt(req.query.page) || 1;
 
-        Promise.all([
-            Newdb.find({})
-                .sort({ createdAt: -1 })
-                .skip((page - 1) * perPage)
-                .limit(perPage),
-
-            Newdb.countDocuments({})
-        ])
-        .then(([newdb, total]) => {
-            res.render('news/index', {
-                newdb: multipleMongooseToObject(newdb),
-                current: page,
-                totalPages: Math.ceil(total / perPage)
-            });
-        })
-        .catch(next);
-    }
-
-    // [GET] /news/:slug  (UI HTML)
-    show(req, res, next) {
-        Newdb.findOne({ slug: req.params.slug })
-            .then(newdb => {
-                if (!newdb) return res.status(404).render('404');
-
-                newdb.body = marked.parse(newdb.body);
-
-                res.render('news/show', {
-                    newdb: mongooseToObject(newdb)
+        NewsService.getPaginatedList(page, perPage)
+            .then(([news, total]) => {
+                res.render('news/index', {
+                    newdb: multipleMongooseToObject(news),
+                    current: page,
+                    totalPages: Math.ceil(total / perPage)
                 });
             })
             .catch(next);
     }
 
-    // API
-    
+    // [GET] /news/:slug
+    show(req, res, next) {
+        NewsService.getNewsBySlug(req.params.slug)
+            .then(news => {
+                if (!news) return res.status(404).render('404');
+
+                res.render('news/show', {
+                    newdb: mongooseToObject(news)
+                });
+            })
+            .catch(next);
+    }
+
     // [GET] /api/news
     apiList(req, res, next) {
-        Newdb.find({})
-            .sort({ createdAt: -1 })
+        NewsService.getAllNews()
             .then(news => {
                 res.json({
                     success: true,
                     data: multipleMongooseToObject(news)
                 });
             })
-            .catch(err => {
-                next(err);
-            });
+            .catch(next);
     }
 
     // [GET] /api/news/:slug
     apiDetail(req, res, next) {
-        Newdb.findOne({ slug: req.params.slug })
-            .then(newdb => {
-                if (!newdb) {
+        NewsService.getDetail(req.params.slug)
+            .then(news => {
+                if (!news) {
                     return res.status(404).json({
                         success: false,
                         msg: 'Not found'
@@ -72,12 +57,10 @@ class NewsController {
 
                 res.json({
                     success: true,
-                    data: mongooseToObject(newdb)
+                    data: mongooseToObject(news)
                 });
             })
-            .catch(err => {
-                next(err);
-            });
+            .catch(next);
     }
 }
 

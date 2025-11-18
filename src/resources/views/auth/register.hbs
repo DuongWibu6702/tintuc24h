@@ -1,13 +1,25 @@
 <div class="d-flex justify-content-center align-items-center vh-100 bg-light">
   <div class="card shadow-sm p-4" style="width: 380px; border-radius: 12px;">
-    
-    <h3 class="text-center fw-bold mb-3">Đăng nhập</h3>
+
+    <h3 class="text-center fw-bold mb-3">Tạo tài khoản</h3>
 
     {{#if error}}
       <div class="alert alert-danger py-2">{{error}}</div>
     {{/if}}
 
-    <form method="POST" action="/login" class="d-flex flex-column gap-3">
+    <form method="POST" action="/register" class="d-flex flex-column gap-3">
+
+      <div>
+        <label for="name" class="form-label fw-semibold">Họ và tên</label>
+        <input 
+          type="text" 
+          class="form-control" 
+          name="name" 
+          id="name"
+          placeholder="Nhập họ và tên"
+          required
+        >
+      </div>
 
       <div>
         <label for="username" class="form-label fw-semibold">Tên đăng nhập</label>
@@ -33,15 +45,28 @@
         >
       </div>
 
+      <div>
+        <label for="confirmPassword" class="form-label fw-semibold">Nhập lại mật khẩu</label>
+        <input 
+          type="password" 
+          class="form-control" 
+          name="confirmPassword" 
+          id="confirmPassword"
+          placeholder="Nhập lại mật khẩu"
+          required
+        >
+      </div>
+
       <button type="submit" class="btn btn-dark w-100 fw-semibold">
-        Đăng nhập
+        Đăng ký
       </button>
 
       <div class="text-center mt-2">
-        Bạn chưa có tài khoản?
-        <a href="/register" class="fw-semibold">Tạo tài khoản</a>
+        Bạn đã có tài khoản?
+        <a href="/login" class="fw-semibold">Đăng nhập</a>
       </div>
 
     </form>
+
   </div>
 </div>
