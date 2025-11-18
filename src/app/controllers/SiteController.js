@@ -1,4 +1,4 @@
-const Newdb = require('../models/news')
+const Newdb = require('../models/News')
 const { mongooseToObject } = require('../../util/mongoose')
 
 class SiteController {

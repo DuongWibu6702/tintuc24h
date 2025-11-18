@@ -1,4 +1,4 @@
-const Newdb = require('../models/news')
+const Newdb = require('../models/News')
 const { mongooseToObject, multipleMongooseToObject } = require('../../util/mongoose')
 const path = require('path');
 const fsExtra = require('fs-extra');

@@ -6,6 +6,7 @@ const app = express()
 const route = require('./routes')
 const db = require('./config/db')
 const methodOverride = require('method-override')
+const globalUser = require('./app/middlewares/globalUser')
 const port = 3000
 
 app.use(express.static(path.join(__dirname, 'public')))
@@ -35,6 +36,9 @@ app.engine('hbs', engine({
 }));
 app.set('view engine', 'hbs')
 app.set('views', path.join(__dirname, 'resources', 'views'))
+
+// User
+app.use(globalUser);
 
 // Routes init
 route(app)
