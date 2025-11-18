@@ -26,10 +26,12 @@ const UserSchema = new mongoose.Schema({
     }
 });
 
-// Hash password trước khi lưu vào DB
-UserSchema.pre('save', async function(next) {
-    // Nếu password không thay đổi → skip
+UserSchema.pre('save', async function (next) {
     if (!this.isModified('password')) return next();
+
+    if (this.password.startsWith("$2b$")) {
+        return next();
+    }
 
     try {
         const salt = await bcrypt.genSalt(10);
@@ -40,8 +42,10 @@ UserSchema.pre('save', async function(next) {
     }
 });
 
-// So sánh mật khẩu người dùng nhập với mật khẩu hash
-UserSchema.methods.comparePassword = function(password) {
+UserSchema.methods.comparePassword = function (password) {
+    console.log(password)
+    console.log(this.password)
+    console.log(bcrypt.compare(password, this.password))
     return bcrypt.compare(password, this.password);
 };
 

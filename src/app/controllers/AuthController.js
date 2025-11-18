@@ -18,13 +18,13 @@ class AuthController {
         User.findOne({ username })
             .then(user => {
                 if (!user) {
-                    return res.render('auth/login', { error: 'Sai tài khoản hoặc mật khẩu' });
+                    return res.render('auth/login', { error: 'Sai tài khoản' });
                 }
-
+                
                 return user.comparePassword(password)
                     .then(match => {
                         if (!match) {
-                            return res.render('auth/login', { error: 'Sai tài khoản hoặc mật khẩu' });
+                            return res.render('auth/login', { error: 'Sai mật khẩu' });
                         }
 
                         // Lưu session
@@ -36,7 +36,7 @@ class AuthController {
 
                         // Admin → vào /admin
                         if (user.role === 'admin') {
-                            return res.redirect('/admin');
+                            return res.redirect('/admin/stored/news');
                         }
 
                         // User → về trang chủ
