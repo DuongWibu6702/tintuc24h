@@ -1,0 +1,65 @@
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Thùng rác (Admin)</h2>
+    <a href="/admin/stored/news" class="btn btn-secondary">Quay về trang quản lý</a>
+  </div>
+
+  {{#if newdb.length}}
+  <table class="table table-striped table-hover">
+    <thead class="table-dark">
+      <tr>
+        <th>Tên bài viết</th>
+        <th>Tác giả</th>
+        <th>Thời gian xóa</th>
+        <th>Hành động</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each newdb}}
+        <tr>
+          <td>{{this.name}}</td>
+          <td>{{this.author}}</td>
+          <td>{{this.deletedAt}}</td>
+          <td>
+            <!-- Restore -->
+            <form action="/admin/restore/{{this._id}}?_method=PATCH" method="POST" style="display:inline-block;">
+              <button type="submit" class="btn btn-sm btn-success me-2">Khôi phục</button>
+            </form>
+
+            <!-- Delete Permanently -->
+            <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deletePermanentModal-{{this._id}}">
+              Xóa hẳn
+            </button>
+
+            <!-- Modal Xóa hẳn -->
+            <div class="modal fade" id="deletePermanentModal-{{this._id}}" tabindex="-1" aria-labelledby="deletePermanentModalLabel-{{this._id}}" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="deletePermanentModalLabel-{{this._id}}">Xác nhận xóa hoàn toàn</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    Bạn có chắc muốn xóa hoàn toàn bài viết <strong>{{this.name}}</strong>? Hành động này không thể hoàn tác.
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <form action="/admin/force/{{this._id}}?_method=DELETE" method="POST" style="display:inline-block;">
+                      <button type="submit" class="btn btn-danger">Xóa hẳn</button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+  {{else}}
+    <div class="alert alert-info text-center">
+      <p>Thùng rác hiện đang trống.</p>
+    </div>
+  {{/if}}
+</div>

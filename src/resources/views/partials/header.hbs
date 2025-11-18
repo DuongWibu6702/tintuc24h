@@ -1,0 +1,65 @@
+<nav class="navbar navbar-expand-lg navbar-dark sticky-top shadow-sm" style="background-color: #343a40;">
+  <div class="container-fluid d-flex align-items-center justify-content-between">
+    <a class="navbar-brand fw-bold text-uppercase" href="/news">Tin tức 24h</a>
+
+    <!-- Nút mở Offcanvas ADMIN -->
+    <button
+      class="btn btn-outline-light"
+      type="button"
+      data-bs-toggle="offcanvas"
+      data-bs-target="#adminOffcanvas"
+      aria-controls="adminOffcanvas">
+      ADMIN
+    </button>
+  </div>
+</nav>
+
+<!-- Offcanvas ADMIN -->
+<div
+  class="offcanvas offcanvas-end text-bg-dark"
+  tabindex="-1"
+  id="adminOffcanvas"
+  aria-labelledby="adminOffcanvasLabel"
+  data-bs-scroll="true"
+  data-bs-backdrop="true">
+  
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title fw-bold" id="adminOffcanvasLabel">Quản trị ADMIN</h5>
+    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+
+  <div class="offcanvas-body d-flex flex-column gap-3">
+    <a href="/admin/posts/add-new" class="btn btn-outline-light w-100 text-start">Đăng bài</a>
+    <a href="/admin/stored/news" class="btn btn-outline-light w-100 text-start">Các tin tức của tôi</a>
+    <hr class="border-secondary">
+    <a href="/logout" class="btn btn-danger w-100 text-start">Đăng xuất</a>
+  </div>
+</div>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top shadow-sm py-2">
+  <div class="container d-flex align-items-center justify-content-between">
+    <!-- Logo -->
+    <a class="navbar-brand fw-bold fs-4 text-uppercase" href="/">24H</a>
+
+    <!-- Nút thu gọn khi màn nhỏ -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Menu -->
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto d-flex align-items-center text-uppercase fw-semibold">
+        <li class="nav-item"><a class="nav-link px-3 fs-6" href="/">Home</a></li>
+        <li class="nav-item"><a class="nav-link px-3 fs-6" href="/news">Tin tức</a></li>
+        <li class="nav-item"><a class="nav-link px-3 fs-6" href="#">Bóng đá</a></li>
+        <li class="nav-item"><a class="nav-link px-3 fs-6" href="#">Kinh doanh</a></li>
+        <li class="nav-item"><a class="nav-link px-3 fs-6" href="#">Giải trí</a></li>
+        <li class="nav-item"><a class="nav-link px-3 fs-6" href="#">Sức khỏe</a></li>
+        <li class="nav-item"><a class="nav-link px-3 fs-6" href="#">Hi-Tech</a></li>
+        <li class="nav-item"><a class="nav-link px-3 fs-6" href="#">Thế giới</a></li>
+        <li class="nav-item"><a class="nav-link px-3 fs-6" href="#">Thể thao</a></li>
+        <li class="nav-item"><a class="nav-link px-3 fs-6" href="#">Ô tô</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>

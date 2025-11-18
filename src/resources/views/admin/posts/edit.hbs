@@ -1,0 +1,118 @@
+<div class="container mt-4">
+  <h2>Chỉnh sửa bài viết</h2>
+
+  <form action="/admin/posts/{{newdb._id}}?_method=PUT" method="POST" enctype="multipart/form-data">
+    <div class="mb-3">
+      <label for="name" class="form-label">Tiêu đề</label>
+      <input type="text" name="name" id="name" class="form-control" value="{{newdb.name}}" required>
+    </div>
+
+    <div class="mb-3">
+      <label for="description" class="form-label">Mô tả ngắn</label>
+      <textarea name="description" id="description" class="form-control" rows="2" required>{{newdb.description}}</textarea>
+    </div>
+
+    <div class="mb-3">
+      <label for="author" class="form-label">Tác giả</label>
+      <input type="text" name="author" id="author" class="form-control" value="{{newdb.author}}" required>
+    </div>
+
+    <div class="mb-3">
+      <label for="source" class="form-label">Nguồn</label>
+      <input type="text" name="source" id="source" class="form-control" value="{{newdb.source}}" required>
+    </div>
+
+    <div class="mb-3">
+      <label for="thumbnail" class="form-label">Thumbnail</label>
+      <input type="file" name="thumbnail" id="thumbnail" class="form-control">
+      <div id="thumbnailPreview" class="mt-2">
+        {{#if newdb.thumbnail}}
+          <img src="{{newdb.thumbnail}}" alt="Thumbnail hiện tại" style="height:80px;">
+        {{/if}}
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="body" class="form-label">Nội dung</label>
+      <textarea name="body" id="body" class="form-control" rows="10">{{newdb.body}}</textarea>
+    </div>
+
+    <button type="submit" class="btn btn-success">Cập nhật</button>
+  </form>
+</div>
+
+<!-- EasyMDE -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.css">
+<script src="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js"></script>
+
+<script>
+  const tmpFolder = Date.now();
+
+  const easyMDE = new EasyMDE({
+    element: document.getElementById('body'),
+    spellChecker: false,
+    toolbar: [
+      "bold", "italic", "heading", "|",
+      "quote", "unordered-list", "ordered-list", "|",
+      "link",
+      {
+        name: "image",
+        action: function(editor){
+          const input = document.createElement('input');
+          input.type = 'file';
+          input.accept = 'image/*';
+          input.click();
+
+          input.onchange = async () => {
+            const file = input.files[0];
+            if(!file) return;
+
+            const formData = new FormData();
+            formData.append('image', file);
+
+            const res = await fetch(`/news/upload/tmp/${tmpFolder}`, { method: 'POST', body: formData });
+            const data = await res.json();
+            if(data.success){
+              const cm = editor.codemirror;
+              const pos = cm.getCursor();
+              cm.replaceRange(`\n![Ảnh minh họa](${data.file.url})\n`, pos);
+            } else {
+              alert('Upload thất bại');
+            }
+          }
+        },
+        className: "fa fa-image",
+        title: "Chèn ảnh"
+      },
+      "|",
+      "preview", "side-by-side", "fullscreen", "|",
+      "guide"
+    ]
+  });
+
+  // Khi submit, gán nội dung EasyMDE vào textarea
+  const form = document.querySelector('form');
+  form.addEventListener('submit', () => {
+    document.getElementById('body').value = easyMDE.value();
+
+    const inputTmp = document.createElement('input');
+    inputTmp.type = 'hidden';
+    inputTmp.name = 'tmpFolder';
+    inputTmp.value = tmpFolder;
+    form.appendChild(inputTmp);
+  });
+
+  // Preview thumbnail khi đổi
+  const thumbnailInput = document.getElementById('thumbnail');
+  const thumbnailPreview = document.getElementById('thumbnailPreview');
+  thumbnailInput.addEventListener('change', () => {
+    const file = thumbnailInput.files[0];
+    if(file){
+      const img = document.createElement('img');
+      img.src = URL.createObjectURL(file);
+      img.style.height = '80px';
+      thumbnailPreview.innerHTML = '';
+      thumbnailPreview.appendChild(img);
+    }
+  });
+</script>

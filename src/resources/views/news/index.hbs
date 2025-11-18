@@ -1,0 +1,63 @@
+<div class="container mt-4">
+  <h2 class="mb-4 fw-bold text-uppercase text-center">Tin tức mới nhất</h2>
+
+  <div class="news-list-wrapper">
+
+    {{#each newdb}}
+
+      <!-- PC layout -->
+      <a href="/news/{{this.slug}}" class="news-item d-none d-md-flex">
+        {{#if this.thumbnail}}
+          <img src="{{this.thumbnail}}" alt="{{this.name}}">
+        {{else}}
+          <div style="width:160px; height:110px; background:#eee; border-radius:5px; margin-right:20px;"></div>
+        {{/if}}
+
+        <div class="flex-grow-1">
+          <div class="news-title">{{truncate this.name 120}}</div>
+          <div class="text-muted">{{truncate this.description 180}}</div>
+        </div>
+      </a>
+
+      <!-- Mobile layout -->
+      <a href="/news/{{this.slug}}" class="news-card d-block d-md-none">
+        {{#if this.thumbnail}}
+          <img src="{{this.thumbnail}}" class="card-img-top" alt="{{this.name}}">
+        {{/if}}
+        <div class="card-body">
+          <h5 class="card-title">{{truncate this.name 60}}</h5>
+          <p class="card-text">{{truncate this.description 120}}</p>
+        </div>
+      </a>
+
+    {{/each}}
+
+  </div>
+
+
+  <!-- Pagination -->
+  <nav aria-label="Page navigation" class="mt-4">
+    <ul class="pagination justify-content-center">
+
+      {{#if (gt current 1)}}
+        <li class="page-item">
+          <a class="page-item" href="/news?page={{minus current 1}}">&laquo; Trước</a>
+        </li>
+      {{/if}}
+
+      {{#each (range 1 totalPages)}}
+        <li class="page-item {{#if (eq this ../current)}}active{{/if}}">
+          <a class="page-link" href="/news?page={{this}}">{{this}}</a>
+        </li>
+      {{/each}}
+
+      {{#if (lt current totalPages)}}
+        <li class="page-item">
+          <a class="page-link" href="/news?page={{plus current 1}}">Sau &raquo;</a>
+        </li>
+      {{/if}}
+
+    </ul>
+  </nav>
+
+</div>

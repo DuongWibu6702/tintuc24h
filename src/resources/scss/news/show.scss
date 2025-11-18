@@ -1,0 +1,47 @@
+.article-body {
+  img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 1rem auto;
+    border-radius: 6px;
+  }
+
+  p {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    text-align: justify;
+    color: #222;
+  }
+}
+
+.article-thumbnail {
+  img {
+    max-height: 420px;
+    object-fit: cover;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 1.6rem !important;
+    line-height: 1.3;
+  }
+
+  .lead {
+    font-size: 1rem;
+  }
+
+  .article-thumbnail {
+    img {
+      max-height: 260px;
+    }
+  }
+
+  .article-body {
+    p {
+      font-size: 0.98rem;
+    }
+  }
+}

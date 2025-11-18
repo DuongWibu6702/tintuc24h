@@ -1,0 +1,42 @@
+@use 'variables' as *;
+
+// Import partials
+@use 'news/index.scss';
+@use 'news/show.scss';
+
+.news-article {
+  .article-body {
+    img {
+      display: block;
+      margin: 0 auto;
+      max-width: 100%;
+      height: auto;
+    }
+
+  }
+
+  .text-center {
+    img {
+      display: block;
+      margin: 0 auto;
+      max-width: 100%;
+      height: auto;
+    }
+
+    p {
+      text-align: center;
+    }
+  }
+
+  .lead {
+    margin-bottom: 1.5rem;
+  }
+
+  h1 {
+    margin-bottom: 1rem;
+  }
+
+  .text-muted {
+    font-size: 0.9rem;
+  }
+}
